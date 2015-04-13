@@ -1,31 +1,117 @@
+" Get running OS
+function! GetRunningOS()
+  if has("win32")
+    return "win"
+  endif
+  if has("unix")
+    if system('uname')=~'Darwin'
+      return "mac"
+    else
+      return "unix"
+    endif
+  endif
+endfunction
 
-" let iCanHazVundle=1
-" let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
-" if !filereadable(vundle_readme)
-"   echo "Installing Vundle.."
-"   echo ""
-"   silent !mkdir -p ~/.vim/bundle
-"   silent !git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-"   let iCanHazVundle=0
-" endif
+let os=GetRunningOS()
 
 
 "" 关闭兼容模式
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-" set the runtime path to include Vundle and initialize
-""""""""""" for windows"""""""""""""""""
-set rtp+=$vim/vimfiles/bundle/Vundle.vim/
-let path='$vim/vimfiles/bundle'
-call vundle#begin(path)
-""""""""""""""""""""""""""""""""""""""""
+if os=="win"
+  """"""""""""""""""""""""""""
+  """""""""just for win"""""""
+  """"""""""""""""""""""""""""
+
+  "" 配色方案
+  " for win
+  set background=dark
+  colorscheme solarized
+  ""colorscheme molokai
+  ""colorscheme phd
+
+  
+  " hi StatusLine ctermfg=red
 
 
-""""""""""""" for linux"""""""""""""""""""""""""""""
-" set rtp+=~/.vim/bundle/Vundle.vim
-" call vundle#begin()
-""""""""""""""""""""""""""""""""""""""""""""""""""""
+  " now set it up to change the status line based on mode
+  if version >= 700
+    au InsertEnter * hi StatusLine term=reverse ctermbg=5 gui=None guibg=#073642
+    au InsertLeave * hi StatusLine term=reverse ctermfg=0 gui=None ctermbg=2 guibg=#073642
+  endif
+
+  "set statusline=[%2*%F%0*]\ [FORMAT=%2*%{&ff}:%{&fenc!=''?&fenc:&enc}%0*]\ [TYPE=%2*%Y%0*]%h%w%r%m%=[Line:%2*%l/%L%0*,Column:%2*%c%0*][%2*%p%%%0*]"
+  "hi User1 ctermfg=gray
+  "hi User2 ctermfg=red
+  "hi User3 ctermfg=white
+
+
+
+  :set go=
+  set backspace=indent,eol,start "启用backspace功能键
+  set guifont=Consolas:h14 "字体设定
+  "启用utf_8支持
+  if has("multi_byte") 
+    " UTF-8 ???? 
+    set encoding=utf-8 
+    set termencoding=utf-8 
+    set formatoptions+=mM 
+    set fencs=utf-8,gbk 
+    if v:lang =~? '^/(zh/)/|/(ja/)/|/(ko/)' 
+      set ambiwidth=double 
+    endif 
+    if has("win32") 
+      source $VIMRUNTIME/delmenu.vim 
+      source $VIMRUNTIME/menu.vim 
+      language messages zh_CN.utf-8 
+    endif 
+  else 
+    echoerr "Sorry, this version of (g)vim was not compiled with +multi_byte" 
+  endif
+
+  "与Windows共享剪贴板
+  set clipboard+=unnamed
+
+  "编辑vimrc之后，重新加载
+  autocmd! bufwritepost _vimrc source $VIM/_vimrc
+
+  """"""""""""""""""""""""""""""""
+  """""""""just for win end"""""""
+  """"""""""""""""""""""""""""""""
+
+  " set the runtime path to include Vundle and initialize
+  """"""""""" for windows"""""""""""""""""
+  set rtp+=$vim/vimfiles/bundle/Vundle.vim/
+  let path='$vim/vimfiles/bundle'
+  call vundle#begin(path)
+  """"""""""""""""""""""""""""""""""""""""
+else
+  " for linux
+  set term=screen
+  "for color
+  colorscheme default
+
+  let iCanHazVundle=1
+  let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
+  if !filereadable(vundle_readme)
+    echo "Installing Vundle.."
+    echo ""
+    silent !mkdir -p ~/.vim/bundle
+    silent !git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    let iCanHazVundle=0
+  endif
+
+  """""""""""" for linux"""""""""""""""""""""""""""""
+  set rtp+=~/.vim/bundle/Vundle.vim
+  call vundle#begin()
+  """""""""""""""""""""""""""""""""""""""""""""""""""
+endif
+
+
+
+
+
 
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
@@ -74,17 +160,21 @@ Plugin 'https://github.com/vim-scripts/VHDL-indent-93-syntax.git'
 " Plugin 'user/L9', {'name': 'newL9'}
 
 " All of your Plugins must be added before the following line
-"" link snippets
-"let UltiSnips_link=expand('~/.vim/UltiSnips/cpp.snippets')
-"let UltiSnips_vim=expand('~/.vim/bundle/ultisnips/autoload/UltiSnips.vim')
-"if !filereadable(UltiSnips_link)
-"  if filereadable(UltiSnips_vim)
-"    echo "Link snippets for UltiSnips..."
-"    echo ""
-"    silent !ln -s ~/.vim/bundle/vim-snippets/snippets ~/.vim/UltiSnips
-"  endif
-"endif
-"
+
+if os!="win"
+  " link snippets
+  let UltiSnips_link=expand('~/.vim/UltiSnips/cpp.snippets')
+  let UltiSnips_vim=expand('~/.vim/bundle/ultisnips/autoload/UltiSnips.vim')
+  if !filereadable(UltiSnips_link)
+    if filereadable(UltiSnips_vim)
+      echo "Link snippets for UltiSnips..."
+      echo ""
+      silent !ln -s ~/.vim/bundle/vim-snippets/snippets ~/.vim/UltiSnips
+    endif
+  endif
+
+endif
+
 call vundle#end()            " required
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
@@ -104,84 +194,12 @@ filetype plugin on
 "
 "
 "
-""""""""""""""""""""""""""""
-"""""""""just for win"""""""
-""""""""""""""""""""""""""""
-
-"" 配色方案
-" for win
-set background=dark
-colorscheme solarized
-""colorscheme molokai
-""colorscheme phd
-
-" for linux
-"set term=screen
-""for color
-" colorscheme default
-
-" hi StatusLine ctermfg=red
-
-
-" now set it up to change the status line based on mode
-if version >= 700
-  au InsertEnter * hi StatusLine term=reverse ctermbg=5 gui=None guibg=#073642
-  au InsertLeave * hi StatusLine term=reverse ctermfg=0 gui=None ctermbg=2 guibg=#073642
-endif
-
-"set statusline=[%2*%F%0*]\ [FORMAT=%2*%{&ff}:%{&fenc!=''?&fenc:&enc}%0*]\ [TYPE=%2*%Y%0*]%h%w%r%m%=[Line:%2*%l/%L%0*,Column:%2*%c%0*][%2*%p%%%0*]"
-"hi User1 ctermfg=gray
-"hi User2 ctermfg=red
-"hi User3 ctermfg=white
-
-
-"Plugin 'https://github.com/derekmcloughlin/gvimfullscreen_win32.git"
-"全屏显示
-if has('gui_running') && has("win32")
-    map <F11> :call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
-endif
-
-imap <F11> :call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
-
-:set go=
-set backspace=indent,eol,start "启用backspace功能键
-set guifont=Consolas:h14 "字体设定
-"启用utf_8支持
-if has("multi_byte") 
-    " UTF-8 ???? 
-    set encoding=utf-8 
-    set termencoding=utf-8 
-    set formatoptions+=mM 
-    set fencs=utf-8,gbk 
-    if v:lang =~? '^/(zh/)/|/(ja/)/|/(ko/)' 
-        set ambiwidth=double 
-    endif 
-    if has("win32") 
-        source $VIMRUNTIME/delmenu.vim 
-        source $VIMRUNTIME/menu.vim 
-        language messages zh_CN.utf-8 
-    endif 
-else 
-    echoerr "Sorry, this version of (g)vim was not compiled with +multi_byte" 
-endif
-
-"与Windows共享剪贴板
-set clipboard+=unnamed
-
-"编辑vimrc之后，重新加载
-autocmd! bufwritepost _vimrc source $VIM/_vimrc
-
-""""""""""""""""""""""""""""""""
-"""""""""just for win end"""""""
-""""""""""""""""""""""""""""""""
-
 
 """"""""""racer_config_start"""""""""""""""""""""
 "" 更新时间：2015-01-18 21:30:31
 "
 "" 定义快捷键的前缀，即 <Leader>
 let mapleader=";"
-"
 "
 "
 
@@ -209,8 +227,8 @@ nmap <Leader>W :wall<CR>:q<CR>
 "" 不做任何保存，直接退出 vim
 nmap <Leader>Q :qa!<CR>
 nmap <Leader>v :vsp<CR>
-nmap <Leader>s :sp<CR>
-nmap <Leader>e :E<CR>
+nmap <Leader>s :Se<CR>
+nmap <Leader>e :Ve<CR>
 "
 "" 设置快捷键遍历子窗口
 "" 依次遍历
@@ -625,15 +643,15 @@ let NERDTreeAutoDeleteBuffer=1
 " NERD_Tree集成到WinManager
 let g:NERDTree_title="[NERDTree]" 
 function! NERDTree_Start()
-    exec 'NERDTree'
+  exec 'NERDTree'
 endfunction
- 
+
 function! NERDTree_IsValid()
-    return 1
+  return 1
 endfunction
- 
+
 " 键盘映射，同时加入防止因winmanager和nerdtree冲突而导致空白页的语句
-nmap wm :if IsWinManagerVisible() <BAR> WMToggle<CR> <BAR> else <BAR> WMToggle<CR>:q<CR> endif <CR><CR>
+" nmap wm :if IsWinManagerVisible() <BAR> WMToggle<CR> <BAR> else <BAR> WMToggle<CR>:q<CR> endif <CR><CR>
 " 设置winmanager的宽度，默认为25
 let g:winManagerWidth=30 
 " 窗口布局
@@ -744,36 +762,36 @@ nmap <ESC>[1;5B <C-w>j
 "  inoremap ) <c-r>=ClosePair(')')<CR>
 "  inoremap { <ESC>a {<CR>}<ESC>kA<CR>
 "  inoremap } <c-r>=ClosePair('}')<CR>
- " inoremap [ []<ESC>i
- " inoremap ] <c-r>=ClosePair(']')<CR>
- " inoremap < <><ESC>i
+" inoremap [ []<ESC>i
+" inoremap ] <c-r>=ClosePair(']')<CR>
+" inoremap < <><ESC>i
 "  inoremap > <c-r>=ClosePair('>')<CR>
- " inoremap << <ESC>a << 
- " inoremap >> <ESC>a >> 
- " inoremap " ""<ESC>i
-  "inoremap " <c-r>=ClosePair('"')<CR>
- " inoremap ' ''<ESC>i
-  "inoremap ' <c-r>=ClosePair(''')<CR>
-  "inoremap ,  <ESC>a, 
- "  inoremap ,, <ESC>la
-  ""inoremap =  <ESC>a = 
- " inoremap == <ESC>a == 
- " inoremap != <ESC>a != 
- " inoremap <= <ESC>a <= 
- " inoremap >= <ESC>a >= 
-  "function ClosePair(char)
+" inoremap << <ESC>a << 
+" inoremap >> <ESC>a >> 
+" inoremap " ""<ESC>i
+"inoremap " <c-r>=ClosePair('"')<CR>
+" inoremap ' ''<ESC>i
+"inoremap ' <c-r>=ClosePair(''')<CR>
+"inoremap ,  <ESC>a, 
+"  inoremap ,, <ESC>la
+""inoremap =  <ESC>a = 
+" inoremap == <ESC>a == 
+" inoremap != <ESC>a != 
+" inoremap <= <ESC>a <= 
+" inoremap >= <ESC>a >= 
+"function ClosePair(char)
 
- " if getline('.')[col('.') - 1] == a:char
+" if getline('.')[col('.') - 1] == a:char
 
-  "return "\<Right>"
+"return "\<Right>"
 
-  "else
+"else
 
-  "return a:char
+"return a:char
 
-  "endif
+"endif
 
-  "endfunction
+"endfunction
 
 
 
@@ -781,46 +799,46 @@ nmap <ESC>[1;5B <C-w>j
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if exists("b:did_indent")
-    finish
+  finish
 endif
 let b:did_indent = 1
 function! GoogleCppIndent()
-    let l:cline_num = line('.')
-    let l:orig_indent = cindent(l:cline_num)
-    if l:orig_indent == 0 | return 0 | endif
-    let l:pline_num = prevnonblank(l:cline_num - 1)
+  let l:cline_num = line('.')
+  let l:orig_indent = cindent(l:cline_num)
+  if l:orig_indent == 0 | return 0 | endif
+  let l:pline_num = prevnonblank(l:cline_num - 1)
+  let l:pline = getline(l:pline_num)
+  if l:pline =~# '^\s*template' | return l:pline_indent | endif
+  if l:orig_indent != &shiftwidth | return l:orig_indent | endif
+  let l:in_comment = 0
+  let l:pline_num = prevnonblank(l:cline_num - 1)
+  while l:pline_num > -1
     let l:pline = getline(l:pline_num)
-    if l:pline =~# '^\s*template' | return l:pline_indent | endif
-    if l:orig_indent != &shiftwidth | return l:orig_indent | endif
-    let l:in_comment = 0
-    let l:pline_num = prevnonblank(l:cline_num - 1)
-    while l:pline_num > -1
-        let l:pline = getline(l:pline_num)
-        let l:pline_indent = indent(l:pline_num)
+    let l:pline_indent = indent(l:pline_num)
 
-        if l:in_comment == 0 && l:pline =~ '^.\{-}\(/\*.\{-}\)\@<!\*/'
-            let l:in_comment = 1
-        elseif l:in_comment == 1
-            if l:pline =~ '/\*\(.\{-}\*/\)\@!'
-                let l:in_comment = 0
-            endif
-        elseif l:pline_indent == 0
-            if l:pline !~# '\(#define\)\|\(^\s*//\)\|\(^\s*{\)'
-                if l:pline =~# '^\s*namespace.*'
-                    return 0
-                else
-                    return l:orig_indent
-                endif
-            elseif l:pline =~# '\\$'
-                return l:orig_indent
-            endif
+    if l:in_comment == 0 && l:pline =~ '^.\{-}\(/\*.\{-}\)\@<!\*/'
+      let l:in_comment = 1
+    elseif l:in_comment == 1
+      if l:pline =~ '/\*\(.\{-}\*/\)\@!'
+        let l:in_comment = 0
+      endif
+    elseif l:pline_indent == 0
+      if l:pline !~# '\(#define\)\|\(^\s*//\)\|\(^\s*{\)'
+        if l:pline =~# '^\s*namespace.*'
+          return 0
         else
-            return l:orig_indent
+          return l:orig_indent
         endif
+      elseif l:pline =~# '\\$'
+        return l:orig_indent
+      endif
+    else
+      return l:orig_indent
+    endif
 
-        let l:pline_num = prevnonblank(l:pline_num - 1)
-    endwhile
-    return l:orig_indent
+    let l:pline_num = prevnonblank(l:pline_num - 1)
+  endwhile
+  return l:orig_indent
 endfunction
 set shiftwidth=2
 set tabstop=2
@@ -890,5 +908,5 @@ map wm :TlistToggle<cr>
 set list
 set listchars=tab:>-,trail:-
 augroup filetype
-    autocmd! BufRead,BufNewFile BUILD set filetype=blade
-augroup end
+  autocmd! BufRead,BufNewFile BUILD set filetype=blade
+  augroup end
