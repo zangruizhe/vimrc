@@ -45,6 +45,12 @@ if os=="win"
   "hi User1 ctermfg=gray
   "hi User2 ctermfg=red
   "hi User3 ctermfg=white
+  "
+  "Plugin 'https://github.com/derekmcloughlin/gvimfullscreen_win32.git"
+  "全屏显示
+  if has('gui_running') && has("win32")
+    map <F11> :call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
+  endif
 
 
 
@@ -109,7 +115,8 @@ else
 endif
 
 
-
+"全屏显示
+imap <F11> :call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
 
 
 
