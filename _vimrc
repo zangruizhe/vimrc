@@ -1,4 +1,5 @@
-let use_plugin="false"
+" let use_plugin="false"
+let use_plugin="true"
 
 " Get running OS
 function! GetRunningOS()
@@ -69,7 +70,8 @@ if use_plugin=="true"
   " " Git plugin not hosted on GitHuhttps://github.com/nathanaelkane/vim-indent-guides.gitb
   " Plugin 'git://git.wincent.com/command-t.git'
   Plugin 'https://github.com/vim-scripts/a.vim.git'
-  Plugin 'https://github.com/Mizuchi/STL-Syntax.git'
+  Plugin 'https://github.com/zangruizhe/cpp.vim.git'
+  " Plugin 'https://github.com/Mizuchi/STL-Syntax.git'
   Plugin 'https://github.com/nathanaelkane/vim-indent-guides.git'
   Plugin 'https://github.com/derekwyatt/vim-scala.git'
   Plugin 'https://github.com/vim-scripts/ctags.vim.git'
@@ -82,7 +84,7 @@ if use_plugin=="true"
   Plugin 'https://github.com/dyng/ctrlsf.vim.git'
   " Plugin 'https://github.com/SirVer/ultisnips.git'
   " Plugin 'https://github.com/honza/vim-snippets.git'
-  Plugin 'https://github.com/fholgado/minibufexpl.vim.git'
+  " Plugin 'https://github.com/fholgado/minibufexpl.vim.git'
   Plugin 'https://github.com/salinasv/vim-vhdl.git'
   Plugin 'https://github.com/vim-scripts/VHDL-indent-93-syntax.git'
   " Plugin 'https://github.com/Valloric/YouCompleteMe.git'
@@ -820,10 +822,6 @@ set magic
 set noerrorbells
 set novisualbell
 set wrap
-"nmap <leader>h <c-w>h
-"nmap <leader>j <c-w>j
-"nmap <leader>k <c-w>k
-"nmap <leader>l <c-w>l
 imap <C-a> <Esc>:A<CR>
 nmap <C-a> :A<CR>
 imap <leader>o <esc>:only<cr>
@@ -851,7 +849,7 @@ let Tlist_Show_One_File=1
 let Tlist_Exit_OnlyWindow=1
 let Tlist_Use_Right_Window=1
 let g:winManagerWindowLayout='FileExplorer|TagList'
-map wm :TlistToggle<cr>
+" map wm :TlistToggle<cr>
 " nmap <leader>s :ConqueTerm<cr>
 " nmap <leader>sv :ConqueTermVSplit<cr>
 set list
