@@ -1,5 +1,5 @@
-let use_plugin="false"
-" let use_plugin="true"
+" let use_plugin="false"
+let use_plugin="true"
 
 " Get running OS
 function! GetRunningOS()
@@ -69,6 +69,7 @@ if use_plugin=="true"
   " Plugin 'L9'
   " " Git plugin not hosted on GitHuhttps://github.com/nathanaelkane/vim-indent-guides.gitb
   " Plugin 'git://git.wincent.com/command-t.git'
+  Plugin 'https://github.com/altercation/vim-colors-solarized.git'
   Plugin 'https://github.com/vim-scripts/a.vim.git'
   Plugin 'https://github.com/zangruizhe/cpp.vim.git'
   " Plugin 'https://github.com/Mizuchi/STL-Syntax.git'
@@ -85,8 +86,8 @@ if use_plugin=="true"
   " Plugin 'https://github.com/SirVer/ultisnips.git'
   " Plugin 'https://github.com/honza/vim-snippets.git'
   " Plugin 'https://github.com/fholgado/minibufexpl.vim.git'
-  Plugin 'https://github.com/salinasv/vim-vhdl.git'
-  Plugin 'https://github.com/vim-scripts/VHDL-indent-93-syntax.git'
+  " Plugin 'https://github.com/salinasv/vim-vhdl.git'
+  " Plugin 'https://github.com/vim-scripts/VHDL-indent-93-syntax.git'
   " Plugin 'https://github.com/Valloric/YouCompleteMe.git'
 
   " " git repos on your local machine (i.e. when working on your own plugin)
@@ -571,12 +572,14 @@ if os=="win"
   """""""""just for win end"""""""
   """"""""""""""""""""""""""""""""
 
-else
+elseif os=="unix"
   " for linux
   set term=screen
   "for color
   colorscheme default
-
+elseif os=="mac"
+  set background=dark
+  colorscheme solarized
 endif
 
 """"""""""racer_config_start"""""""""""""""""""""
