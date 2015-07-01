@@ -1,5 +1,5 @@
-" let use_plugin="false"
-let use_plugin="true"
+let use_plugin="false"
+" let use_plugin="true"
 
 " Get running OS
 function! GetRunningOS()
